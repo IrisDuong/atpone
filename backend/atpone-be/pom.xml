@@ -38,6 +38,7 @@
 	<modules>
 		<module>config-server</module>
 		<module>discovery</module>
+		<module>common-utils</module>
 	</modules>
 	<build>
 		<pluginManagement>
