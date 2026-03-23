@@ -1,1 +1,2 @@
 com.atpone.utils.config.CommonUtilsAutoConfiguration
+com.atpone.utils.config.JpaAuditingConfiguration
