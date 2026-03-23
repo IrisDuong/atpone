@@ -1,5 +1,8 @@
 package com.atpone.auth.config;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -40,22 +43,15 @@ public class SecurityConfig {
 	@Bean
 	@Order(2)
 	public SecurityFilterChain defaultFiltlerChain(HttpSecurity http) throws Exception {
+		System.out.println(ZoneId.systemDefault());
+		System.out.println(LocalDateTime.now());
 		return http.csrf(csrf->csrf.disable())
 				.authorizeHttpRequests(auth->auth
 						.requestMatchers("/login","/oauth2/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.formLogin(form->form.disable())
-				.oauth2Login(oauth2Login->oauth2Login.successHandler((request, response,authentication)->{
-					try {
-
-						OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-						log.info("[AUTHEN] - email = "+oAuth2User.getAttribute("email"));
-						log.info("[AUTHEN] - name = "+oAuth2User.getAttribute("name"));
-					} catch (Exception e) {
-						log.error(e.getMessage());
-					}
-				}))
+				.oauth2Login(Customizer.withDefaults())
 				.build();
 	}
 }
