@@ -9,8 +9,9 @@ import com.atpone.utils.service.DataConverter;
 
 public interface LocalizedDataValueService extends DataConverter<LocalizedDataValue, LocalizedDataValueDTO>{
 
-	void createByist(List<LocalizedDataValueDTO> dtos);
+	void createByList(List<LocalizedDataValueDTO> dtos);
 	List<LocalizedDataValueDTO> findByLocaleCode(Integer localeCode);
+	List<LocalizedDataValueDTO> findByListLocaleCodes(List<Integer> listLocaleCodes);
 	Integer findMaxLocaleCode();
 	
 	@Override

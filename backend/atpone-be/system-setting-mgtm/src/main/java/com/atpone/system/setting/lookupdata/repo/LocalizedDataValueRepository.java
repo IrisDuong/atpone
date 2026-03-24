@@ -18,5 +18,5 @@ public interface LocalizedDataValueRepository extends JpaRepository<LocalizedDat
 	Integer findMaxLocaleCode();
 	
 	List<LocalizedDataValue> findById_LocaleCode(Integer localeCode);
-	
+	List<LocalizedDataValue> findById_LocaleCodeIn(List<Integer> localeCodes);
 }
