@@ -14,7 +14,7 @@ public class BadRequestException extends BaseException{
 
 	public BadRequestException(String message) {
 		super(message);
-		this.httpStatusCode = HttpStatus.NOT_FOUND.value();
+		this.httpStatusCode = HttpStatus.BAD_REQUEST.value();
 	}
 
 }

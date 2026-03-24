@@ -14,7 +14,7 @@ public class NotFoundException extends BaseException{
 
 	public NotFoundException(String message) {
 		super(message);
-		this.httpStatusCode = HttpStatus.BAD_REQUEST.value();
+		this.httpStatusCode = HttpStatus.NOT_FOUND.value();
 	}
 
 }
