@@ -1,12 +1,16 @@
 package com.atpone.system.setting.lookupdata.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atpone.system.setting.lookupdata.dto.LookupTypeRequestDTO;
@@ -42,12 +46,28 @@ public class LookupTypeController {
 	
 	@GetMapping("/detail/{id}")
 	public ResponseEntity<ApiResponse<LookupTypeResponseDTO>> getLookupTypeDetail(@PathVariable Integer id){
-		if(Boolean.TRUE.equals(SystemUtils.isEmptyData(id))) {
-			throw new BadRequestException("Lookup type Id is required");
-		}
 		LookupTypeResponseDTO result = lookupTypeService.getLookupTypeDetail(id);
-		ResponseEntity<ApiResponse<LookupTypeResponseDTO>> response = ApiUtils.buildAPIResponse(result, HttpStatus.CREATED, "Get Lookup Type Successfully");
+		ResponseEntity<ApiResponse<LookupTypeResponseDTO>> response = ApiUtils.buildAPIResponse(result, HttpStatus.OK, "Get Lookup Type Successfully");
 		log.info("Get Lookup Type Successfully");
+		return response;
+	}
+	
+	@PostMapping("/search")
+	public ResponseEntity<ApiResponse<List<LookupTypeResponseDTO>>> searchlookupTypes(@RequestBody LookupTypeRequestDTO request){
+		if(Boolean.TRUE.equals(SystemUtils.isEmptyData(request))) {
+			throw new BadRequestException("Request is required");
+		}
+		var result = lookupTypeService.searchLookupTypes(request);
+		ResponseEntity<ApiResponse<List<LookupTypeResponseDTO>>> response = ApiUtils.buildAPIResponse(result, HttpStatus.OK, "Search List Lookup Type Successfully");
+		log.info("Search List  Lookup Type Successfully");
+		return response;
+	}
+	
+	@DeleteMapping("/deleteById/{id}")
+	public ResponseEntity<ApiResponse<Boolean>> deleteById(@PathVariable Integer id){
+		lookupTypeService.deleteById(id);
+		ResponseEntity<ApiResponse<Boolean>> response = ApiUtils.buildAPIResponse(true, HttpStatus.OK, "Delete Lookup Type Successfully");
+		log.info("Search List  Lookup Type Successfully");
 		return response;
 	}
 }

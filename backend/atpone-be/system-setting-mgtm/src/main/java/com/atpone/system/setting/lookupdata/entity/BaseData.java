@@ -36,6 +36,6 @@ public abstract class BaseData extends BaseAuditingEntity{
 	@Enumerated(EnumType.STRING)
 	protected ActiveStatus activeStatus;
 	
-	@Column(name = "localized_code_no", nullable = false)
-	protected Integer localeCodeNo;
+	@Column(name = "locale_no", nullable = false)
+	protected Integer localeCode;
 }

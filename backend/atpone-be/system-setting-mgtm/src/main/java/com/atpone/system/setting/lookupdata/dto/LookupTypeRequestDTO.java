@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class LookupTypeRequestDTO {
 	private Integer id;
 	private String lookupTypeCode;
+	private String lookupTypeName;
 	private List<LocalizedDataValueDTO> localizedDataValueDTOs;
 	private String sysFeatureCode;
 	private Integer codeTypeValue;

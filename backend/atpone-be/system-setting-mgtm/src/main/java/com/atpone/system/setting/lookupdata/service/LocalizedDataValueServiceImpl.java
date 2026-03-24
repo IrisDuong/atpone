@@ -33,7 +33,7 @@ public class LocalizedDataValueServiceImpl implements LocalizedDataValueService{
 
 	@Override
 	@Transactional(propagation = Propagation.MANDATORY)
-	public void createByist(List<LocalizedDataValueDTO> dtos) {
+	public void createByList(List<LocalizedDataValueDTO> dtos) {
 		try {
 			List<LocalizedDataValue> paramsToSave = dtos.stream()
 					.map(this::convertToEntity).toList();
@@ -43,5 +43,14 @@ public class LocalizedDataValueServiceImpl implements LocalizedDataValueService{
 			throw new RuntimeException();
 		}
 	}
+
+	@Override
+	public List<LocalizedDataValueDTO> findByListLocaleCodes(List<Integer> listLocaleCodes) {
+		List<LocalizedDataValue> result = localizedDataValueRepository.findById_LocaleCodeIn(listLocaleCodes);
+		List<LocalizedDataValueDTO> listLocalizedDataValueDTOs = result
+				.stream().map(this::convertToDto).toList();
+		return listLocalizedDataValueDTOs;
+	}
+
 	
 }
