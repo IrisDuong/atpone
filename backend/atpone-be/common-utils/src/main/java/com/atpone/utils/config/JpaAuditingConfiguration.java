@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import com.atpone.utils.auditing.AuditorAwareImpl;
 
 @Configuration
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @ConditionalOnClass(name = "org.springframework.data.jpa.repository.JpaRepository")
 public class JpaAuditingConfiguration {
 	
