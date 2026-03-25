@@ -4,23 +4,25 @@ import java.util.Optional;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import com.atpone.utils.system.SystemUtils;
 
 public class AuditorAwareImpl implements AuditorAware<String>{
-
+	
 	@Override
 	public Optional<String> getCurrentAuditor() {
-		var context = SecurityContextHolder.getContext();
-		if(Boolean.FALSE.equals(SystemUtils.isEmptyData(context)) 
-				&& Boolean.FALSE.equals(SystemUtils.isEmptyData(context.getAuthentication()))) {
-			if(context.getAuthentication().isAuthenticated()) {
-				return Optional.of(context.getAuthentication().getName());
+		var securityContext = SecurityContextHolder.getContext();
+		if(Boolean.FALSE.equals(SystemUtils.isEmptyData(securityContext))  
+				&& Boolean.FALSE.equals(SystemUtils.isEmptyData(securityContext.getAuthentication()))) {
+			var authentication = securityContext.getAuthentication();
+			if(authentication.getPrincipal()  instanceof Jwt jwt) {
+	            return Optional.of(jwt.getClaimAsString("email"));
 			}
-            return Optional.of("ANONYMOUS");
+	        return Optional.of("SYSTEM");
+		}else {
+	        return Optional.of("ANONYMOUS");
 		}
-        return Optional.of("SYSTEM");
 	}
-
-	
 }
