@@ -12,7 +12,7 @@ public interface LookupTypeService extends DataConverter<LookupType, LookupTypeR
 	Boolean create(LookupTypeRequestDTO dto);
 	LookupTypeResponseDTO getLookupTypeDetail(Integer id);
 	List<LookupTypeResponseDTO> searchLookupTypes(LookupTypeRequestDTO dto);
-	void deleteById(Integer id);
+	void deleteById(Integer lookupTypeId, Integer localeCode);
 	
 	@Override
 	default LookupTypeResponseDTO convertToDto(LookupType e) {

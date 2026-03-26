@@ -119,12 +119,15 @@ public class LookupTypeServiceImpl implements LookupTypeService{
 	}
 
 	@Override
-	public void deleteById(Integer id) {
+	@Transactional
+	public void deleteById(Integer lookupTypeId, Integer localeCode) {
 		try {
-			lookupTypeRepository.deleteById(id);
+			lookupTypeRepository.deleteById(lookupTypeId);
+			localizedDataValueService.deleteById(localeCode);
 		} catch (EmptyResultDataAccessException e) {
 			throw new NotFoundException("Lookup Type does not exist");
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new InternalServerErrorException("Delete Lookup Type failed");
 		}
 	}

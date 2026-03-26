@@ -63,9 +63,9 @@ public class LookupTypeController {
 		return response;
 	}
 	
-	@DeleteMapping("/deleteById/{id}")
-	public ResponseEntity<ApiResponse<Boolean>> deleteById(@PathVariable Integer id){
-		lookupTypeService.deleteById(id);
+	@DeleteMapping("/deleteById")
+	public ResponseEntity<ApiResponse<Boolean>> deleteById(@RequestParam Integer lookupTypeId, @RequestParam Integer localeCode){
+		lookupTypeService.deleteById(lookupTypeId,localeCode);
 		ResponseEntity<ApiResponse<Boolean>> response = ApiUtils.buildAPIResponse(true, HttpStatus.OK, "Delete Lookup Type Successfully");
 		log.info("Search List  Lookup Type Successfully");
 		return response;
