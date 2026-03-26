@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.atpone.system.setting.lookupdata.entity.LocalizedDataValue;
@@ -19,4 +20,8 @@ public interface LocalizedDataValueRepository extends JpaRepository<LocalizedDat
 	
 	List<LocalizedDataValue> findById_LocaleCode(Integer localeCode);
 	List<LocalizedDataValue> findById_LocaleCodeIn(List<Integer> localeCodes);
+	
+	@Modifying
+	@Query("DELETE FROM LocalizedDataValue L WHERE L.id.localeCode = :localeCode ")
+	Integer deleteByLocaleCode(Integer localeCode);
 }

@@ -52,5 +52,11 @@ public class LocalizedDataValueServiceImpl implements LocalizedDataValueService{
 		return listLocalizedDataValueDTOs;
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.MANDATORY)
+	public void deleteById(Integer localeCode) {
+		localizedDataValueRepository.deleteByLocaleCode(localeCode);
+	}
+
 	
 }

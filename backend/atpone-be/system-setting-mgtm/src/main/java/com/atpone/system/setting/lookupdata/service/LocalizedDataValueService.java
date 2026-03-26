@@ -13,6 +13,7 @@ public interface LocalizedDataValueService extends DataConverter<LocalizedDataVa
 	List<LocalizedDataValueDTO> findByLocaleCode(Integer localeCode);
 	List<LocalizedDataValueDTO> findByListLocaleCodes(List<Integer> listLocaleCodes);
 	Integer findMaxLocaleCode();
+	void deleteById(Integer localeCode);
 	
 	@Override
 	default LocalizedDataValueDTO convertToDto(LocalizedDataValue e) {
