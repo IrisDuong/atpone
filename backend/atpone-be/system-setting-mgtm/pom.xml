@@ -10,8 +10,8 @@
 		repository -->
 	</parent>
 	<groupId>com.atpone.system.setting</groupId>
-	<artifactId>system-setting-mgtm</artifactId>
-	<name>system-setting-mgtm</name>
+	<artifactId>system-setting-mgmt</artifactId>
+	<name>system-setting-mgmt</name>
 	<description>system setting management</description>
 	<url/>
 	<licenses>
