@@ -14,8 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Value("${url.public.auth-server}")
-	String publicAuthServerURL;
+	@Value("${INTERNAL_URL_AUTH_SERVER}")
+	String internalAuthServerURL;
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -28,6 +28,6 @@ public class SecurityConfig {
 	
 	@Bean
 	public JwtDecoder jwtDecoder() {
-		return NimbusJwtDecoder.withJwkSetUri(publicAuthServerURL.concat("/oauth2/jwks")).build();
+		return NimbusJwtDecoder.withJwkSetUri(internalAuthServerURL.concat("/oauth2/jwks")).build();
 	}
 }
