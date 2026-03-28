@@ -39,6 +39,9 @@
 		<module>config-server</module>
 		<module>discovery</module>
 		<module>common-utils</module>
+		<module>api-gateway</module>
+		<module>auth-server</module>
+		<module>system-setting-mgmt</module>
 	</modules>
 	<build>
 		<pluginManagement>
