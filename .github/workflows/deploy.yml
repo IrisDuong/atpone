@@ -42,13 +42,8 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push ${{ matrix.service }}
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend/atpone-be/${{ matrix.service }}
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/atpone-${{ matrix.service }}:latest
-            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
+        run: |
+          docker build -f backend/atpone-be/${{ matrix.service }}/Dockerfile ${{ secrets.DOCKER_USERNAME }}/atpone-${{ matrix.service }}:1.0 .
   deploy:
     name: Deplpy to VPS
     runs-on: ubuntu-latest
