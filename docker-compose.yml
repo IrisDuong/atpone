@@ -1,0 +1,71 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PWD_MYSQL}
+    ports:
+      - "${DB_PORT_MYSQL}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+  config-server:
+    build: ./backend/atpone-be/config-server
+    container_name: config-server
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "${PORT_CONFIG_SERVER}:8888"
+    networks:
+      - nw-atpone
+  discovery:
+    build: ./backend/atpone-be/discovery
+    container_name: discovery
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "${PORT_DISCOVERY}:9999"
+    depends_on:
+      - config-server
+    networks:
+      - nw-atpone
+  auth-server:
+    build: ./backend/atpone-be/auth-server
+    container_name: auth-server
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "${PORT_AUTH_SERVER}:9000"
+    depends_on:
+      - config-server
+      - discovery
+    networks:
+      - nw-atpone
+  api-gateway:
+    build: ./backend/atpone-be/api-gateway
+    container_name: api-gateway
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "${PORT_GATEWAY}:8080"
+    depends_on:
+      - config-server
+      - discovery
+      - auth-server
+    networks:
+      - nw-atpone
+networks:
+  nw-atpone:
+    driver: bridge
+volumes:
+  mysql_data:
