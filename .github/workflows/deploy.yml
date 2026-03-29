@@ -43,7 +43,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push ${{ matrix.service }}
         run: |
-          docker build -f backend/atpone-be/${{ matrix.service }}/Dockerfile ${{ secrets.DOCKER_USERNAME }}/atpone-${{ matrix.service }}:1.0 .
+          docker build -f backend/atpone-be/${{ matrix.service }}/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/atpone-${{ matrix.service }}:1.0 .
   deploy:
     name: Deplpy to VPS
     runs-on: ubuntu-latest
