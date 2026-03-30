@@ -12,7 +12,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
   config-server:
-    build: ./backend/atpone-be/config-server
+    image: manhnk2/atpone-config-server:1.0
     container_name: config-server
     env_file:
       - .env
@@ -23,7 +23,7 @@ services:
     networks:
       - nw-atpone
   discovery:
-    build: ./backend/atpone-be/discovery
+    image: manhnk2/atpone-discovery:1.0
     container_name: discovery
     env_file:
       - .env
@@ -36,7 +36,7 @@ services:
     networks:
       - nw-atpone
   auth-server:
-    build: ./backend/atpone-be/auth-server
+    image: manhnk2/atpone-auth-server:1.0
     container_name: auth-server
     env_file:
       - .env
@@ -50,7 +50,7 @@ services:
     networks:
       - nw-atpone
   api-gateway:
-    build: ./backend/atpone-be/api-gateway
+    image: manhnk2/atpone-api-gateway:1.0
     container_name: api-gateway
     env_file:
       - .env
@@ -58,6 +58,21 @@ services:
       TZ: Asia/Ho_Chi_Minh
     ports:
       - "${PORT_GATEWAY}:8080"
+    depends_on:
+      - config-server
+      - discovery
+      - auth-server
+    networks:
+      - nw-atpone
+  system-setting-mgmt:
+    image: manhnk2/atpone-system-setting-mgmt:1.0
+    container_name: system-setting-mgmt
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "${PORT_SYS_SETTING_MGTMT}:8081"
     depends_on:
       - config-server
       - discovery
