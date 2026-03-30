@@ -4,7 +4,7 @@ services:
     container_name: mysql
     restart: always
     env_file:
-      - .env
+      - ../.env
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PWD_MYSQL}
     ports:
@@ -15,7 +15,7 @@ services:
     image: ${DOCKER_USERNAME}/atpone-config-server:1.0
     container_name: config-server
     env_file:
-      - .env
+      - ../.env
     environment:
       TZ: Asia/Ho_Chi_Minh
     ports:
@@ -26,7 +26,7 @@ services:
     image: ${DOCKER_USERNAME}/atpone-discovery:1.0
     container_name: discovery
     env_file:
-      - .env
+      - ../.env
     environment:
       TZ: Asia/Ho_Chi_Minh
     ports:
@@ -39,7 +39,7 @@ services:
     image: ${DOCKER_USERNAME}/atpone-auth-server:1.0
     container_name: auth-server
     env_file:
-      - .env
+      - ../.env
     environment:
       TZ: Asia/Ho_Chi_Minh
     ports:
@@ -53,7 +53,7 @@ services:
     image: ${DOCKER_USERNAME}/atpone-api-gateway:1.0
     container_name: api-gateway
     env_file:
-      - .env
+      - ../.env
     environment:
       TZ: Asia/Ho_Chi_Minh
     ports:
@@ -68,7 +68,7 @@ services:
     image: ${DOCKER_USERNAME}/atpone-system-setting-mgmt:1.0
     container_name: system-setting-mgmt
     env_file:
-      - .env
+      - ../.env
     environment:
       TZ: Asia/Ho_Chi_Minh
     ports:
