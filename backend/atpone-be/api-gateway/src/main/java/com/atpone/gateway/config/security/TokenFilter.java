@@ -25,7 +25,7 @@ public class TokenFilter implements GlobalFilter{
 		String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 		if(Boolean.FALSE.equals(SystemUtils.isEmptyData(authHeader)) && authHeader.startsWith("Bearer ")) {
 			// for API calling
-			chain.filter(exchange);
+			return chain.filter(exchange);
 		}else {
 			// for frontend request
 			HttpCookie cookie = request.getCookies().getFirst(CookieUtils.ACCESS_TOKEN_NAME);
