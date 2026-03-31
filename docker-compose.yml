@@ -12,10 +12,12 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD","mysqladmin","ping","-h","localhost","-uroot","-p${DB_PWD_MYSQL}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+    networks:
+      - nw-atpone
   config-server:
     image: ${DOCKER_USERNAME}/atpone-config-server:1.0
     container_name: config-server
