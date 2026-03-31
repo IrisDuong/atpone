@@ -11,6 +11,11 @@ services:
       - "${DB_PORT_MYSQL}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD","mysqladmin","ping","-h","localhost","-uroot","-p${DB_PWD_MYSQL}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   config-server:
     image: ${DOCKER_USERNAME}/atpone-config-server:1.0
     container_name: config-server
@@ -20,11 +25,17 @@ services:
       TZ: Asia/Ho_Chi_Minh
     ports:
       - "${PORT_CONFIG_SERVER}:8888"
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost:${PORT_CONFIG_SERVER}/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - nw-atpone
   discovery:
     image: ${DOCKER_USERNAME}/atpone-discovery:1.0
     container_name: discovery
+    restart: always
     env_file:
       - ../.env
     environment:
@@ -32,7 +43,8 @@ services:
     ports:
       - "${PORT_DISCOVERY}:9999"
     depends_on:
-      - config-server
+      config-server:
+        condition: service_healthy
     networks:
       - nw-atpone
   auth-server:
@@ -45,8 +57,8 @@ services:
     ports:
       - "${PORT_AUTH_SERVER}:9000"
     depends_on:
-      - config-server
-      - discovery
+      discovery:
+        condition: service_started
     networks:
       - nw-atpone
   api-gateway:
@@ -59,9 +71,8 @@ services:
     ports:
       - "${PORT_GATEWAY}:8080"
     depends_on:
-      - config-server
-      - discovery
-      - auth-server
+      auth-server:
+        condition: service_started
     networks:
       - nw-atpone
   system-setting-mgmt:
@@ -74,10 +85,10 @@ services:
     ports:
       - "${PORT_SYS_SETTING_MGTMT}:8081"
     depends_on:
-      - mysql
-      - config-server
-      - discovery
-      - auth-server
+      mysql:
+        condition: service_healthy
+      auth-server:
+        condition: service_started
     networks:
       - nw-atpone
 networks:
