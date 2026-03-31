@@ -74,6 +74,7 @@ services:
     ports:
       - "${PORT_SYS_SETTING_MGTMT}:8081"
     depends_on:
+      - mysql
       - config-server
       - discovery
       - auth-server
