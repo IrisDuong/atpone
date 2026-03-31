@@ -57,6 +57,7 @@ services:
   auth-server:
     image: ${DOCKER_USERNAME}/atpone-auth-server:1.0
     container_name: auth-server
+    restart: always
     env_file:
       - ../.env
     environment:
@@ -65,12 +66,13 @@ services:
       - "${PORT_AUTH_SERVER}:9000"
     depends_on:
       discovery:
-        condition: service_started
+        condition: service_healthy
     networks:
       - nw-atpone
   api-gateway:
     image: ${DOCKER_USERNAME}/atpone-api-gateway:1.0
     container_name: api-gateway
+    restart: always
     env_file:
       - ../.env
     environment:
@@ -79,7 +81,7 @@ services:
       - "${PORT_GATEWAY}:8080"
     depends_on:
       discovery:
-        condition: service_started
+        condition: service_healthy
       auth-server:
         condition: service_started
     networks:
@@ -87,6 +89,7 @@ services:
   system-setting-mgmt:
     image: ${DOCKER_USERNAME}/atpone-system-setting-mgmt:1.0
     container_name: system-setting-mgmt
+    restart: always
     env_file:
       - ../.env
     environment:
@@ -94,12 +97,12 @@ services:
     ports:
       - "${PORT_SYS_SETTING_MGTMT}:8081"
     depends_on:
+      mysql:
+        condition: service_healthy
       discovery:
         condition: service_healthy
       auth-server:
         condition: service_started
-      mysql:
-        condition: service_healthy
     networks:
       - nw-atpone
 networks:
