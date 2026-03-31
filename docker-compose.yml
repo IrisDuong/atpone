@@ -1,23 +1,4 @@
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    restart: always
-    env_file:
-      - ../.env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PWD_MYSQL}
-    ports:
-      - "${DB_PORT_MYSQL}:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    networks:
-      - nw-atpone
   config-server:
     image: ${DOCKER_USERNAME}/atpone-config-server:1.0
     container_name: config-server
@@ -47,6 +28,11 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9999/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - nw-atpone
   auth-server:
@@ -87,7 +73,7 @@ services:
     ports:
       - "${PORT_SYS_SETTING_MGTMT}:8081"
     depends_on:
-      mysql:
+      discovery:
         condition: service_healthy
       auth-server:
         condition: service_started
