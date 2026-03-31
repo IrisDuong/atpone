@@ -28,7 +28,7 @@ public class GatewayConfig {
 	public RouteLocator routeLocator(RouteLocatorBuilder builder) {
 		return builder.routes()
 				.route("SYSTEM-SETTING-MGMT",r-> r
-						.path("system-setting-mgmt")
+						.path("/system-setting-mgmt/**")
 						.filters(f->f.stripPrefix(1))
 						.uri("lb://system-setting-mgmt")
 				)
