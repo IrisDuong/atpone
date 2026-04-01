@@ -1,0 +1,63 @@
+name: CI/CD workflow for ATP One deployment by jars
+on: 
+  push:
+    branches: ["develop"]
+  pull_request:
+    branches: ["develop"]
+  workflow_dispatch:
+    inputs:
+      force-deploy:
+        description: "Force deploy with jars"
+        type: boolean
+        default: false
+jobs:
+  build-and-deploy:
+    name: Build and deploy to VPS
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [config-server, discovery, auth-server, api-gateway,system-setting-mgmt]
+      fail-fast: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref:  ${{ github.head_ref || github.ref_name}}
+      - name: Debug logs
+        run: |
+          echo "Current dir : "
+          ls backend || echo 'no backend'
+          echo 'Find pom.xml'
+          find . -name "pom.xml"
+          echo "github.ref = ${{ github.ref }}"
+          echo "github.ref_name = ${{ github.ref_name }}"
+      - name: Build maven
+        working-directory: ${{ secrets.GIT_BE_PATH }}
+        run: |
+          mvn -pl ${{ matrix.service }} -am clean package -DskipTests
+      - name: Jar path
+        run: |
+          echo "Checking build artifacts for: ${{ matrix.service }}"
+          find ${{ secrets.GIT_BE_PATH }}/${{ matrix.service }}/target -name "*.jar"
+      - name: Copy JAR to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_SERVER_IP }}
+          username : ${{ secrets.SSH_SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "backend/atpone-be/${{ matrix.service }}/target/*.jar"
+          target: "/opt/apps/spring/atpone-jar/services"
+          strip_components: 4
+      - name: Restart Service via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_SERVER_IP }}
+          username : ${{ secrets.SSH_SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            chmod +x ${{ secrets.SERVER_PROJECT_PATH }}/deploy.sh
+            /${{ secrets.SERVER_PROJECT_PATH }}/deploy.sh ${{ matrix.service }}
+          
+    
+      
+  
